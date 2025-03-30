@@ -21,6 +21,15 @@ body {
     max-width: 500px;
     animation: slideUp 0.8s ease-out;
 }
+@media (max-width: 600px) {
+    body {
+        padding: 20px;
+    }
+    .container {
+        width: 100%;
+        padding: 20px;
+    }
+}
 .container:hover{
     box-shadow: 0 5px 40px rgb(43, 0, 255);
     transition: ease-in , 0.7s;
