@@ -75,7 +75,7 @@ button {
     border-radius: 5px;
     cursor: pointer;
     opacity: 0;
-    margin: 25px;
+    margin: 18px;
     animation: fadeInUp 0.5s 0.5s forwards;
 }
 
