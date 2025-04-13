@@ -1,31 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Generate QR codes easily with our QR Code Generator. Create, download, and share QR codes for URLs, text, and more.">
-    <meta name="keywords" content="QR Code Generator, QR Code, Personalized qr, QR gen, jay qr, temp qr,  Generate QR, Download QR Code, Share QR Code, QR Code Tool">
-    <title>QR Code Generator</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-     
-</head>
-<body>
-    <div class="container">
-
-    <h1> QR Code Generator</h1>
-    <input type="text" id="text" placeholder="Enter name or URL">
-    <button onclick="generateQR()">Generate QR Code</button>
-    <div id="qrcode"></div>
-         <p>Note: Don't share your bank releted information anywhere. </p>
-    <button onclick="downloadQR()">Download QR Code</button>
-    <button onclick="shareQR()">Share QR Code</button>
-    <h6>Developed by JAY</h6>
-    </div>
-    <script src="script.js"></script>
-    
-</body>
-</html>
+ <html lang="en">
+ <head>
+     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Generate QR codes easily with our QR Code Generator. Create, download, and share QR codes for URLs, text, and more.">
+     <meta name="keywords" content="QR Code Generator, QR Code, Personalized qr, QR gen, jay qr, temp qr,  Generate QR, Download QR Code, Share QR Code, QR Code Tool">
+ 
+     <title>QR Code Generator</title>
+     <link rel="stylesheet" href="style.css">
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+ 
+ </head>
+ <body>
+     <div class="container">
+ 
+     <h1> QR Code Generator</h1>
+     <input type="text" id="text" placeholder="Enter name or URL">
+     <button onclick="generateQR()">Generate QR Code</button>
+     <div id="qrcode"></div>
+          <p>Note: Don't share your bank releted information anywhere. </p>
+     <button onclick="downloadQR()">Download QR Code</button>
+     <button onclick="shareQR()">Share QR Code</button>
+     <button onclick="clearQR()">Clear QR Code</button>
+     <h6>Developed by JAY</h6>
+     </div>
+     <script src="script.js"></script>
+ 
+ </body>
+ </html>
