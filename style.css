@@ -14,7 +14,7 @@ body {
     margin-top: 2%;
     background-color: #080d61;
     border-radius: 15px;
-    padding: 25px;
+    padding: 20px;
     text-align: center;
     width: 100%;
     max-width: 500px;
@@ -26,7 +26,7 @@ body {
     }
     .container {
         width: 100%;
-        padding: 20px;
+        padding: 17px;
     }
      button {
         width: 50%;
@@ -97,7 +97,7 @@ h6{
     height: 40%;
     width: 40%;
     display: inline-block;
-    padding: 4px;
+    padding: 0px;
     background-color: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
