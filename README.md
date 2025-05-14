@@ -1,4 +1,4 @@
-# QR Code Generator 🔳
+# QR Code Generator 
 
 Generate QR codes instantly from any text or URL! This is a simple, fast, and responsive web application built using **HTML**, **CSS**, and **JavaScript**.
 
