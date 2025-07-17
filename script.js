@@ -6,8 +6,8 @@ function generateQR() {
     if (text.trim() !== "") {
         new QRCode(qrDiv, {
             text: text,
-            width: 120,
-            height: 120
+            width: 100,
+            height: 100
         });
 }     else {
         alert("Please enter valid text!");
