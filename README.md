@@ -25,6 +25,4 @@ Generate QR codes instantly from any text or URL! This is a simple, fast, and re
 - CSS3– Styling and responsiveness
 - JavaScript – Dynamic QR generation using `qrcode.js`
 
-##  Project Structure
-
 
