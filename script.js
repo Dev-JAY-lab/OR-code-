@@ -6,8 +6,8 @@ function generateQR() {
     if (text.trim() !== "") {
         new QRCode(qrDiv, {
             text: text,
-            width: 100,
-            height: 100
+            width: 140,
+            height: 140
         });
 }     else {
         alert("Please enter valid text!");
@@ -44,3 +44,4 @@ function shareQR() {
         alert("Sharing not supported or QR code not generated.");
     }
 }
+
