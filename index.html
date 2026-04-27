@@ -1,33 +1,137 @@
 <!DOCTYPE html>
- <html lang="en">
- <head>
-     <meta charset="UTF-8">
-<meta http-equiv="refresh" content="120">
-     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <meta name="description" content="Generate QR codes easily with our QR Code Generator. Create, download, and share QR codes for URLs, text, and more.">
-     <meta name="keywords" content="QR Code Generator, QR Code, Personalized qr, QR gen, jay qr, temp qr,  Generate QR, Download QR Code, Share QR Code, QR Code Tool">
- 
-     <title>QR Code Generator</title>
-     <link rel="preconnect" href="https://fonts.googleapis.com">
-     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-     <link rel="stylesheet" href="style.css">
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
- 
- </head>
- <body>
-     <div class="container">
- 
-     <h1> QR Code Generator</h1>
-     <input type="text" id="text" placeholder="Enter name or URL">
-        <p>Note: Don't share your bank releted information anywhere. </p>
-     <button onclick="generateQR()">Generate QR Code</button>
-     <div id="qrcode"></div>
-     <button onclick="downloadQR()">Download QR Code</button>
-     <button onclick="shareQR()">Share QR Code</button>
-     <h6>Developed by JAY</h6>
-     </div>
-     <script src="script.js"></script>
- 
- </body>
- </html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Premium QR Code Generator. Create, customize, download, and share beautiful QR codes instantly.">
+    <meta name="keywords" content="QR Code Generator, Custom QR Code, Premium QR, Download QR Code, Share QR Code">
+    <title>ProQR - The Ultimate 3D QR Generator</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Libraries -->
+    <script type="text/javascript" src="https://unpkg.com/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+</head>
+<body>
+    <div class="background-effects">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="main-layout">
+        <!-- Hero Section with 3D elements -->
+        <aside class="hero-section">
+            <div class="hero-content">
+                <div class="logo">
+                    <i class="fa-solid fa-qrcode"></i>
+                    <h1>Pro<span>QR</span></h1>
+                </div>
+                <h2 class="hero-tagline">Welcome to the future of <br><span class="gradient-text">QR Generation</span></h2>
+                <p class="subtitle">Customizable. Super-fast. 100% Free.</p>
+                
+                <div class="image-wrapper" data-tilt data-tilt-max="15" data-tilt-speed="400" data-tilt-perspective="1000" data-tilt-glare data-tilt-max-glare="0.3">
+                    <img src="3d-tech.png" alt="3D Holographic Tech" class="hero-3d-image">
+                </div>
+            </div>
+        </aside>
+
+        <!-- Application Core -->
+        <main class="app-wrapper">
+            <div class="app-container slide-in-right">
+                
+                <!-- Left Panel: Controls -->
+                <section class="controls-panel">
+                    <div class="panel-header">
+                        <h3>Configuration</h3>
+                        <div class="pulse-indicator"></div>
+                    </div>
+                    
+                    <div class="input-group stagger-item">
+                        <label for="qr-data"><i class="fa-solid fa-link"></i> Link or Data</label>
+                        <textarea id="qr-data" placeholder="Enter URL, text, or any data here..." rows="2">https://example.com</textarea>
+                    </div>
+
+                    <div class="customization-section stagger-item">
+                        <h3><i class="fa-solid fa-palette"></i> Style Your Code</h3>
+                        
+                        <div class="color-controls">
+                            <div class="input-group">
+                                <label for="color-dark">QR Color</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" id="color-dark" value="#ffffff">
+                                    <span class="color-value" id="color-dark-val">#ffffff</span>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="color-light">Background</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" id="color-light" value="#000000">
+                                    <span class="color-value" id="color-light-val">#000000</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="style-controls">
+                            <div class="input-group">
+                                <label for="dot-style">Pattern</label>
+                                <select id="dot-style">
+                                    <option value="square">Square</option>
+                                    <option value="dots" selected>Dots</option>
+                                    <option value="rounded">Rounded</option>
+                                    <option value="extra-rounded">Extra Rounded</option>
+                                    <option value="classy">Classy</option>
+                                    <option value="classy-rounded">Classy Rounded</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label for="corner-style">Corners</label>
+                                <select id="corner-style">
+                                    <option value="square">Square</option>
+                                    <option value="dot">Dot</option>
+                                    <option value="extra-rounded" selected>Extra Rounded</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Right Panel: Preview & Actions -->
+                <section class="preview-panel stagger-item">
+                    <!-- Added Tilt to the QR preview -->
+                    <div class="qr-preview-container" data-tilt data-tilt-max="10" data-tilt-speed="400" data-tilt-perspective="500">
+                        <div id="qr-canvas"></div>
+                        <div class="scanning-line"></div>
+                        <div class="glass-reflection"></div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="btn-download" title="Download High-Res PNG">
+                            <i class="fa-solid fa-cloud-arrow-down"></i> Download PNG
+                        </button>
+                        <button class="btn btn-secondary" id="btn-share" title="Share with friends">
+                            <i class="fa-solid fa-paper-plane"></i> Share
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <footer class="app-footer">
+        <p>Designed with <i class="fa-solid fa-heart"></i> by <strong>JAY</strong></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
