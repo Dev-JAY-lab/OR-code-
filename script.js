@@ -43,8 +43,39 @@ const btnDownload = document.getElementById('btn-download');
 const btnShare = document.getElementById('btn-share');
 const qrCanvas = document.getElementById('qr-canvas');
 
-// Initial Render
-qrCode.append(qrCanvas);
+// Helper function to show toasts for mobile/app users
+function showToast(message) {
+    let toast = document.getElementById('qr-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'qr-toast';
+        document.body.appendChild(toast);
+        Object.assign(toast.style, {
+            position: 'fixed',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            backgroundColor: 'rgba(99, 102, 241, 0.95)',
+            color: '#fff',
+            padding: '12px 24px',
+            borderRadius: '8px',
+            zIndex: '9999',
+            fontFamily: "'Outfit', sans-serif",
+            fontSize: '14px',
+            textAlign: 'center',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+            opacity: '0',
+            transition: 'opacity 0.3s ease',
+            pointerEvents: 'none'
+        });
+    }
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+    }, 4000);
+}
 
 // Helper function to debounce input
 function debounce(func, wait) {
@@ -85,7 +116,18 @@ function updateQR() {
             color: darkColor
         }
     });
+
+    // Render as an image to support native App/Webview long-press
+    qrCode.getRawData("png").then(blob => {
+        if(blob) {
+            const url = URL.createObjectURL(blob);
+            qrCanvas.innerHTML = `<img src="${url}" alt="QR Code" style="width: 100%; height: auto; display: block; border-radius: 14px; pointer-events: auto;">`;
+        }
+    }).catch(err => console.error(err));
 }
+
+// Initial Render
+updateQR();
 
 // Event Listeners for inputs
 qrDataInput.addEventListener('input', debounce(updateQR, 300));
@@ -110,10 +152,21 @@ btnDownload.addEventListener('click', () => {
         alert('Please enter some data to generate a QR code.');
         return;
     }
-    qrCode.download({
-        name: "ProQR-Code",
-        extension: "png"
-    });
+
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (isMobile) {
+        showToast("📱 App user: Long-Press the QR code above to Save image.");
+        return; // Prevent AppsGeyser from throwing 'permission not granted'
+    }
+
+    try {
+        qrCode.download({
+            name: "ProQR-Code",
+            extension: "png"
+        });
+    } catch(e) {
+        console.error("Download failed", e);
+    }
 });
 
 // Share Action
@@ -124,8 +177,10 @@ btnShare.addEventListener('click', async () => {
         return;
     }
 
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
     if (!navigator.share) {
-        alert('Web Share API is not supported in your browser.');
+        showToast("📱 Share API not supported in app. Please Long-Press the QR code to Share.");
         return;
     }
 
@@ -143,7 +198,10 @@ btnShare.addEventListener('click', async () => {
         });
     } catch (err) {
         console.error("Error sharing:", err);
-        // Fallback or user canceled
+        // If user didn't just cancel, show hint
+        if (isMobile && err.name !== 'AbortError') {
+            showToast("📱 Tip: You can also Long-Press the QR code to Share.");
+        }
     }
 });
 
