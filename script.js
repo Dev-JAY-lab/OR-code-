@@ -43,6 +43,13 @@ const btnDownload = document.getElementById('btn-download');
 const btnShare = document.getElementById('btn-share');
 const qrCanvas = document.getElementById('qr-canvas');
 
+// History DOM Elements
+const btnHistory = document.getElementById('btn-history');
+const historyModal = document.getElementById('history-modal');
+const closeHistory = document.getElementById('close-history');
+const historyList = document.getElementById('history-list');
+const btnClearHistory = document.getElementById('btn-clear-history');
+
 // Helper function to show toasts for mobile/app users
 function showToast(message) {
     let toast = document.getElementById('qr-toast');
@@ -138,11 +145,11 @@ function showMobileOverlay(imgSrc, actionType) {
         Object.assign(text.style, {
             color: 'white',
             marginTop: '2rem',
-            fontSize: '1.2rem',
+            fontSize: '1.1rem',
             fontFamily: "'Outfit', sans-serif",
             textAlign: 'center',
             padding: '0 20px',
-            lineHeight: '1.5'
+            lineHeight: '1.6'
         });
         overlay.appendChild(text);
         
@@ -156,7 +163,12 @@ function showMobileOverlay(imgSrc, actionType) {
     }
     
     document.getElementById('mobile-qr-img').src = imgSrc;
-    document.getElementById('mobile-qr-text').innerHTML = `<strong>${actionType}</strong><br><br>👇 Long-Press the QR code above to Save or Share.`;
+    document.getElementById('mobile-qr-text').innerHTML = `
+        <strong style="color: #fb7185; font-size: 1.3rem;">App Permissions Restricted</strong><br><br>
+        Your app wrapper blocks native downloads and sharing.<br><br>
+        <span style="color: #4ade80; font-size: 1.2rem; font-weight: bold;">📸 Take a SCREENSHOT to save!</span><br><br>
+        <em>(Tap anywhere to close)</em>
+    `;
     
     overlay.style.display = 'flex';
     setTimeout(() => overlay.style.opacity = '1', 10);
@@ -174,6 +186,85 @@ function debounce(func, wait) {
         timeout = setTimeout(later, wait);
     };
 }
+
+// History Management
+const HISTORY_KEY = 'proqr_history';
+let qrHistory = JSON.parse(localStorage.getItem(HISTORY_KEY)) || [];
+
+function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
+function renderHistory() {
+    if (!historyList) return;
+    if (qrHistory.length === 0) {
+        historyList.innerHTML = '<li class="empty-history">No history yet. Generate some QR codes!</li>';
+        return;
+    }
+    historyList.innerHTML = '';
+    qrHistory.forEach((item) => {
+        const li = document.createElement('li');
+        li.className = 'history-item';
+        const dateStr = new Date(item.timestamp).toLocaleString(undefined, {
+            month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'
+        });
+        li.innerHTML = `
+            <div class="history-data">${escapeHTML(item.data)}</div>
+            <div class="history-time">${dateStr}</div>
+        `;
+        li.onclick = () => {
+            qrDataInput.value = item.data;
+            updateQR();
+            historyModal.classList.remove('active');
+        };
+        historyList.appendChild(li);
+    });
+}
+
+function saveToHistory(data) {
+    if (!data || data === "https://example.com" || data.trim() === "") return;
+    if (qrHistory.length > 0 && qrHistory[0].data === data) return;
+    
+    qrHistory = qrHistory.filter(item => item.data !== data);
+    qrHistory.unshift({ data: data, timestamp: new Date().toISOString() });
+    if (qrHistory.length > 20) qrHistory.pop();
+    
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(qrHistory));
+    renderHistory();
+}
+
+// Initial render
+renderHistory();
+
+// History Event Listeners
+if (btnHistory) {
+    btnHistory.addEventListener('click', () => {
+        historyModal.classList.add('active');
+    });
+}
+if (closeHistory) {
+    closeHistory.addEventListener('click', () => {
+        historyModal.classList.remove('active');
+    });
+}
+if (btnClearHistory) {
+    btnClearHistory.addEventListener('click', () => {
+        qrHistory = [];
+        localStorage.removeItem(HISTORY_KEY);
+        renderHistory();
+    });
+}
+if (historyModal) {
+    historyModal.addEventListener('click', (e) => {
+        if (e.target === historyModal) {
+            historyModal.classList.remove('active');
+        }
+    });
+}
+
+const debouncedSaveHistory = debounce((data) => saveToHistory(data), 1500);
 
 // Update QR Code
 function updateQR() {
@@ -207,6 +298,11 @@ function updateQR() {
         if(blob) {
             const url = URL.createObjectURL(blob);
             qrCanvas.innerHTML = `<img src="${url}" alt="QR Code" style="width: 100%; height: auto; display: block; border-radius: 14px; pointer-events: auto;">`;
+            
+            // Save history
+            if (data !== "https://example.com") {
+                debouncedSaveHistory(data);
+            }
         }
     }).catch(err => console.error(err));
 }
