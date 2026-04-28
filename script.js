@@ -72,9 +72,94 @@ function showToast(message) {
     toast.textContent = message;
     toast.style.opacity = '1';
     
-    setTimeout(() => {
+        setTimeout(() => {
         toast.style.opacity = '0';
     }, 4000);
+}
+
+// Helper function to show full-screen overlay for mobile long-press
+function showMobileOverlay(imgSrc, actionType) {
+    let overlay = document.getElementById('mobile-qr-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'mobile-qr-overlay';
+        document.body.appendChild(overlay);
+        
+        Object.assign(overlay.style, {
+            position: 'fixed',
+            top: '0',
+            left: '0',
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(0, 0, 0, 0.95)',
+            zIndex: '10000',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            opacity: '0',
+            transition: 'opacity 0.3s ease'
+        });
+
+        const closeBtn = document.createElement('button');
+        closeBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+        Object.assign(closeBtn.style, {
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            background: 'none',
+            border: 'none',
+            color: 'white',
+            fontSize: '2rem',
+            cursor: 'pointer'
+        });
+        closeBtn.onclick = () => {
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 300);
+        };
+        overlay.appendChild(closeBtn);
+
+        const img = document.createElement('img');
+        img.id = 'mobile-qr-img';
+        Object.assign(img.style, {
+            width: '80%',
+            maxWidth: '350px',
+            borderRadius: '16px',
+            boxShadow: '0 0 30px rgba(99, 102, 241, 0.5)',
+            userSelect: 'none',
+            WebkitUserSelect: 'none',
+            WebkitTouchCallout: 'default', // Ensures long-press works on iOS
+            pointerEvents: 'auto'
+        });
+        overlay.appendChild(img);
+
+        const text = document.createElement('div');
+        text.id = 'mobile-qr-text';
+        Object.assign(text.style, {
+            color: 'white',
+            marginTop: '2rem',
+            fontSize: '1.2rem',
+            fontFamily: "'Outfit', sans-serif",
+            textAlign: 'center',
+            padding: '0 20px',
+            lineHeight: '1.5'
+        });
+        overlay.appendChild(text);
+        
+        // Clicking outside the image closes it
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.style.display = 'none', 300);
+            }
+        };
+    }
+    
+    document.getElementById('mobile-qr-img').src = imgSrc;
+    document.getElementById('mobile-qr-text').innerHTML = `<strong>${actionType}</strong><br><br>👇 Long-Press the QR code above to Save or Share.`;
+    
+    overlay.style.display = 'flex';
+    setTimeout(() => overlay.style.opacity = '1', 10);
 }
 
 // Helper function to debounce input
@@ -155,7 +240,12 @@ btnDownload.addEventListener('click', () => {
 
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     if (isMobile) {
-        showToast("📱 App user: Long-Press the QR code above to Save image.");
+        qrCode.getRawData("png").then(blob => {
+            if(blob) {
+                const url = URL.createObjectURL(blob);
+                showMobileOverlay(url, "Download Options");
+            }
+        });
         return; // Prevent AppsGeyser from throwing 'permission not granted'
     }
 
@@ -180,7 +270,12 @@ btnShare.addEventListener('click', async () => {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     if (!navigator.share) {
-        showToast("📱 Share API not supported in app. Please Long-Press the QR code to Share.");
+        qrCode.getRawData("png").then(blob => {
+            if(blob) {
+                const url = URL.createObjectURL(blob);
+                showMobileOverlay(url, "Share Options");
+            }
+        });
         return;
     }
 
